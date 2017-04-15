@@ -9,6 +9,8 @@
 #include "cons.h"
 #include "atom.h"
 
+list GlobalEnv = NULL;
+
 list ExtendEnv(list name, list value, list env) {
     return Cons(Cons(name, value), env);
 }

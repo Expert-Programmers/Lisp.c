@@ -8,7 +8,7 @@
 #ifndef SIMPLERPEL_ENVIRONMENT_H
 #define SIMPLERPEL_ENVIRONMENT_H
 
-list GlobalEnv = NULL;
+extern list GlobalEnv;
 
 list ExtendEnv(list name, list value, list env);
 

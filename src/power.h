@@ -7,14 +7,14 @@
 
 #include "base.h"
 
-list Eval(list a);
+extern list Eval(list a);
 
-list EvalList(list args);
+extern list EvalList(list args);
 
-list ApplyCFun(void *fun, int n, list args);
+extern list ApplyCFun(void *fun, int n, list args);
 
-list ProgN(list seq);
+extern list ProgN(list seq);
 
-list Apply(list fun, list args);
+extern list Apply(list fun, list args);
 
 #endif //SIMPLERPEL_POWER_H

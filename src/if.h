@@ -7,6 +7,6 @@
 
 #include "base.h"
 
-list _If(list exp, list th, list el);
+extern list _If(list exp, list th, list el);
 
 #endif //SIMPLERPEL_IF_H

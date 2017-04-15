@@ -10,18 +10,18 @@
 
 extern list GlobalEnv;
 
-list ExtendEnv(list name, list value, list env);
+extern list ExtendEnv(list name, list value, list env);
 
-list ExtendListEnv(list names, list values, list env);
+extern list ExtendListEnv(list names, list values, list env);
 
-list LookupVar(list name, list env);
+extern list LookupVar(list name, list env);
 
-list VarVal(list name);
+extern list VarVal(list name);
 
-list SetQ(list name, list val);
+extern list SetQ(list name, list val);
 
-list _SetQ(list name, list val);
+extern list _SetQ(list name, list val);
 
-void Defun(void *f, int args, char *name);
+extern void Defun(void *f, int args, char *name);
 
 #endif //SIMPLERPEL_ENVIRONMENT_H

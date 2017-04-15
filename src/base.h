@@ -8,20 +8,20 @@
 
 typedef void *list;
 
-int TypeTag(list v);
+extern int TypeTag(list v);
 
-list Quote(list a);
+extern list Quote(list a);
 
-list Plus(list a, list b);
+extern list Plus(list a, list b);
 
-list Negate(list a);
+extern list Negate(list a);
 
-list Times(list a, list b);
+extern list Times(list a, list b);
 
-list Eq(list a, list b);
+extern list Eq(list a, list b);
 
-list Equal(list a, list b);
+extern list Equal(list a, list b);
 
-list Lambda(list all);
+extern list Lambda(list all);
 
 #endif //SIMPLERPEL_BASE_H

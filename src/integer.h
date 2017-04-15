@@ -16,10 +16,10 @@ typedef struct Tint {
     int val;
 } *Pint, Tint;
 
-list Integer(int i);
+extern list Integer(int i);
 
-int isInteger(list v);
+extern int isInteger(list v);
 
-int getInteger(list v);
+extern int getInteger(list v);
 
 #endif //SIMPLERPEL_INTEGER_H

@@ -20,16 +20,16 @@ extern list AtomList;
 extern list t;
 extern list nil;
 
-list Atom(char *name);
+extern list Atom(char *name);
 
-char *getAtomString(list v);
+extern char *getAtomString(list v);
 
-int isAtom(list v);
+extern int isAtom(list v);
 
-int isNULL(list v);
+extern int isNULL(list v);
 
-list Bool(int b);
+extern list Bool(int b);
 
-int getBool(list v);
+extern int getBool(list v);
 
 #endif //SIMPLERPEL_ATOM_H

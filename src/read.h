@@ -7,20 +7,20 @@
 
 #include "base.h"
 
-list ReadExp(char c);
+extern list ReadExp(char c);
 
-list Print(list a);
+extern list Print(list a);
 
-char SkipSpace(char c);
+extern char SkipSpace(char c);
 
-list ReadInt(char c);
+extern list ReadInt(char c);
 
-list ReadAtom(char c);
+extern list ReadAtom(char c);
 
-list ReadCons(char c);
+extern list ReadCons(char c);
 
-list ReadExp(char c);
+extern list ReadExp(char c);
 
-list Read(void);
+extern list Read(void);
 
 #endif //SIMPLERPEL_READ_H

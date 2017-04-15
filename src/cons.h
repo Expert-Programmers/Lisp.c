@@ -15,16 +15,16 @@ typedef struct Tcons {
     struct Tcons *cdr;
 } *Pcons, Tcons;
 
-list Cons(list car, list cdr);
+extern list Cons(list car, list cdr);
 
-int isCons(list v);
+extern int isCons(list v);
 
-list Car(list cell);
+extern list Car(list cell);
 
-list Cdr(list cell);
+extern list Cdr(list cell);
 
-list SetCar(list car, list val);
+extern list SetCar(list car, list val);
 
-list SetCdr(list cdr, list val);
+extern list SetCdr(list cdr, list val);
 
 #endif //SIMPLERPEL_CONS_H

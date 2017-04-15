@@ -16,14 +16,14 @@ typedef struct Tcfunc {
     void *func;
 } *Pcfunc, Tcfunc;
 
-list Cfunc(void *f, int args, list name);
+extern list Cfunc(void *f, int args, list name);
 
-int isCfunc(list v);
+extern int isCfunc(list v);
 
-void *getCfunc(list v);
+extern void *getCfunc(list v);
 
-list getCfuncName(list v);
+extern list getCfuncName(list v);
 
-int getCfuncArgs(list v);
+extern int getCfuncArgs(list v);
 
 #endif //SIMPLERPEL_CFUNC_H

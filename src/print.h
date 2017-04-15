@@ -7,14 +7,14 @@
 
 #include "base.h"
 
-void Prin1_Cons(FILE *f, list v);
+extern void Prin1_Cons(FILE *f, list v);
 
-void Prin1_Internal(FILE *f, list v);
+extern void Prin1_Internal(FILE *f, list v);
 
-list Terpri(void);
+extern list Terpri(void);
 
-list Prin1(list v);
+extern list Prin1(list v);
 
-list Print(list v);
+extern list Print(list v);
 
 #endif //SIMPLERPEL_PRINT_H

@@ -15,10 +15,10 @@
 #include "if.h"
 #include "cons.h"
 
-void InitLisp();
+extern void InitLisp();
 
-void ReadEvalLoop();
+extern void ReadEvalLoop();
 
-void Lisp();
+extern void Lisp();
 
 #endif //SIMPLERPEL_CORE_H

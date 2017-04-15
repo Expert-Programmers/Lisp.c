@@ -16,9 +16,9 @@ typedef struct Tatom {
     struct Tatom *next;
 } *Patom, Tatom;
 
-list AtomList = NULL;
-list t = NULL;
-list nil = NULL;
+extern list AtomList;
+extern list t;
+extern list nil;
 
 list Atom(char *name);
 

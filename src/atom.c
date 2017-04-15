@@ -6,6 +6,9 @@
 #include <stdlib.h>
 #include "atom.h"
 
+list AtomList = NULL;
+list t = NULL;
+list nil = NULL;
 
 list Atom(char *name) {
     list i = AtomList;

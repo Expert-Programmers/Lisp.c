@@ -3,9 +3,9 @@
 //
 #include <stdio.h>
 #include "environment.h"
-#include "cons.h"
-#include "atom.h"
 #include "cfunc.h"
+#include "print.h"
+#include "power.h"
 
 list ExtendEnv(list name, list value, list env) {
     return Cons(Cons(name, value), env);

@@ -3,7 +3,7 @@
 说白了，REPL(Read-Eval-Print Loop)就和Python, Ruby(irb)一样就是个交互式解释器.
 
 
-#### firis
+#### first
 <p><code>
 git clone https://github.com/LToddy/simpleRPEL.git
 </code></p>

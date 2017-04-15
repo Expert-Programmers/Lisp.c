@@ -26,9 +26,7 @@ char *getAtomString(list v);
 
 int isAtom(list v);
 
-int isAtomNULL(list v);
-
-int AtomNULL(list v);
+int isNULL(list v);
 
 list Bool(int b);
 

@@ -5,9 +5,26 @@
 #ifndef SIMPLERPEL_BASE_H
 #define SIMPLERPEL_BASE_H
 
+#include "integer.h"
+#include "atom.h"
+#include "cons.h"
+
 typedef void *list;
 
 int TypeTag(list v);
 
+list Quote(list a);
+
+list Plus(list a, list b);
+
+list Negate(list a);
+
+list Times(list a, list b);
+
+list Eq(list a, list b);
+
+list Equal(list a, list b);
+
+list Lambda(list all);
 
 #endif //SIMPLERPEL_BASE_H

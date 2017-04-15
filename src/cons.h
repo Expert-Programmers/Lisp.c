@@ -17,7 +17,7 @@ typedef struct Tcons {
 
 list Cons(list car, list cdr);
 
-int IsCons(list v);
+int isCons(list v);
 
 list Car(list cell);
 

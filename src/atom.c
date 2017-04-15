@@ -34,12 +34,8 @@ char *getAtomString(list v) {
     return ((Patom) v)->name;
 }
 
-int isAtomNULL(list v) {
+int isNULL(list v) {
     return (v == nil);
-}
-
-int AtomNULL(list v) {
-    return !isAtomNULL(v);
 }
 
 list Bool(int b) {
@@ -51,7 +47,7 @@ list Bool(int b) {
 }
 
 int getBool(list v) {
-    if (isAtomNULL(v)) {
+    if (isNULL(v)) {
         return 0;
     } else {
         return 1;

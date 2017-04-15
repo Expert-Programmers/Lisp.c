@@ -5,6 +5,9 @@
 #include <stdio.h>
 #include "print.h"
 #include "cfunc.h"
+#include "cons.h"
+#include "atom.h"
+#include "integer.h"
 
 void Prin1_Cons(FILE *f, list v) {
     Prin1_Internal(f, Car(v));

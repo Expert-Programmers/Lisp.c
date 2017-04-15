@@ -4,6 +4,7 @@
 
 #include "if.h"
 #include "power.h"
+#include "atom.h"
 
 list _If(list exp, list th, list el) {
     if (isNULL(Eval(exp)))

@@ -5,9 +5,6 @@
 #ifndef SIMPLERPEL_BASE_H
 #define SIMPLERPEL_BASE_H
 
-#include "integer.h"
-#include "atom.h"
-#include "cons.h"
 
 typedef void *list;
 

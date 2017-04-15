@@ -3,6 +3,9 @@
 //
 
 #include "base.h"
+#include "integer.h"
+#include "atom.h"
+#include "cons.h"
 
 int TypeTag(list v) {
     return *((int *) v);

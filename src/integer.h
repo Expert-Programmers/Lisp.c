@@ -5,6 +5,8 @@
 #ifndef SIMPLERPEL_INTEGER_H
 #define SIMPLERPEL_INTEGER_H
 
+#include <stdlib.h>
+
 #include "base.h"
 
 #define INTEGER 3

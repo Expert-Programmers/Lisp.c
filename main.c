@@ -5,6 +5,7 @@
 #include "src/print.h"
 #include "src/read.h"
 #include "src/if.h"
+#include "src/cons.h"
 
 void InitLisp() {
     nil = Atom("NIL");

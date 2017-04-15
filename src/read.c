@@ -6,6 +6,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "read.h"
+#include "cons.h"
+#include "atom.h"
+#include "integer.h"
 
 char SkipSpace(char c) {
     while (isspace(c)) {

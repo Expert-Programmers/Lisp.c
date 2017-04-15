@@ -5,6 +5,9 @@
 #include "power.h"
 #include "environment.h"
 #include "cfunc.h"
+#include "atom.h"
+#include "cons.h"
+#include "integer.h"
 
 list Eval(list a) {
     if (isInteger(a))

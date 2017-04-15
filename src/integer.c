@@ -2,7 +2,6 @@
 // Created by me on 17-4-15.
 //
 
-#include <stdlib.h>
 #include "integer.h"
 
 list Integer(int i) {

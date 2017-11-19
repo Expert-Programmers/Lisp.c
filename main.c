@@ -13,6 +13,70 @@ int TypeTag(list v)
 
 // --------------------------------------------
 
+#define CONS 1
+
+typedef struct Tcons {
+    int tag;
+    struct Tcons *car;
+    struct Tcons *cdr;
+} *Pcons, Tcons; // 序偶
+
+list Cons(list car, list cdr)
+{
+    Pcons v = (Pcons) malloc(sizeof(Tcons));
+    v->tag = CONS;
+    v->car = car;
+    v->cdr = cdr;
+    return v;
+} // 序偶的构造函数
+
+int IsCons(list cons)
+{   // 判断是否是一个Cons
+    return TypeTag(cons) == CONS;
+}
+
+list Car(list cons)
+{   // 获得car元素
+    if (IsCons(cons)) {
+        return ((Pcons) cons)->car;
+    } else {
+        return NULL;
+    }
+}
+
+list Cdr(list cons)
+{
+    // 获得cdr元素
+    if (IsCons(cons)) {
+        return ((Pcons) cons)->cdr;
+    } else {
+        return NULL;
+    }
+}
+
+list SetCar(list cons, list val)
+{
+    // 为序偶cons的car元素赋值
+    if (IsCons(cons)) {
+        ((Pcons) cons)->car = val;
+        return cons;
+    } else {
+        return NULL;
+    }
+}
+
+list SetCdr(list cons, list val)
+{
+    // 为序偶cons的cdr元素赋值
+    if (IsCons(cons)) {
+        ((Pcons) cons)->cdr = val;
+        return cons;
+    } else {
+        return NULL;
+    }
+}
+
+// --------------------------------------------
 
 int main()
 {

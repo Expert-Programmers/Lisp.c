@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef void *list; // lisp(list process)中,一切都是列表
 
@@ -73,6 +74,82 @@ list SetCdr(list cons, list val)
         return cons;
     } else {
         return NULL;
+    }
+}
+
+// --------------------------------------------
+
+#define ATOM 2
+
+typedef struct Tatom {
+    int tag;
+    char *name;
+    struct Tatom *next;
+} *Patom, Tatom; // 原子
+
+// 一个简单的链表
+list AtomList = NULL;
+list nil = NULL;
+list t = NULL; // true
+// nil与t虽然值相同,但是所在的内存地址不同,所以这两个变量是有区别的
+
+list Atom(char *name)
+{
+    list i = AtomList;
+//    所有的原子存放在一个列表里面, 在构建新的Atom的时候, 先去表中查是否存在相同的, 如果不存在相同的, 才创建atom.
+//    享元模式, 节省空间
+    while (i) {
+        if (strcmp(((Patom) i)->name, name) == 0) {
+            return i;
+        }
+        i = ((Patom) i)->next;
+    }
+
+//    创建新的atom
+    {
+        Patom v = (Patom) malloc(sizeof(Tatom));
+        v->tag = ATOM;
+        v->name = name;
+        v->next = AtomList;
+        AtomList = v;
+        return v;
+    }
+}
+
+char *GetAtomString(list atom)
+{
+    if (IsCons(atom)) {
+        return ((Patom) atom)->name;
+    } else {
+        return NULL;
+    }
+}
+
+int IsAtom(list v)
+{   // 判断是否为atom
+    return TypeTag(v) == ATOM;
+}
+
+int IsNULL(list v)
+{
+    return v == nil;
+}
+
+list Bool(list b)
+{
+    if (b) {
+        return t;
+    } else {
+        return nil;
+    }
+}
+
+int GetBool(list v)
+{
+    if (IsNULL(v)) {
+        return 0;
+    } else {
+        return 1;
     }
 }
 

@@ -239,6 +239,69 @@ int GetCfuncArgs(list v)
 
 // --------------------------------------------
 
+void Print_Cons(FILE *f, list v);
+
+void Print_Internal(FILE *f, list v);
+
+void Print_Internal(FILE *f, list v)
+{
+    if (IsNULL(v)) {
+        fprintf(f, "NIL ");
+    } else {
+        switch (TypeTag(v)) {
+            case CONS:
+                fprintf(f, "(");
+                Print_Cons(f, v);
+                fprintf(f, ")");
+                break;
+            case ATOM:
+                fprintf(f, "%s ", GetAtomString(v));
+                break;
+            case INTEGER:
+                fprintf(f, "%d ", GetIneteger(v));
+                break;
+            case CFUNC:
+                fprintf(f, "<CFUNC %d %s>", GetCfuncArgs(v), GetAtomString(GetCfuncName(v)));
+                break;
+            default:
+                fprintf(f, "<UNPRINTABLE %p>", v);
+                break;
+        }
+    }
+}
+
+void Print_Cons(FILE *f, list v)
+{
+    Print_Internal(f, Car(v));
+    if (IsCons(Cdr(v))) {
+        Print_Internal(f, Cdr(v));
+    } else if (IsNULL(Cdr(v))) { ;
+    } else {
+        fprintf(f, " . ");
+        Print_Internal(f, Cdr(v));
+    }
+}
+
+list NewLine()
+{
+    fprintf(stdout, "\n");
+    return nil;
+}
+
+list Print(list v)
+{
+    Print_Internal(stdout, v);
+    return v;
+}
+
+list Println(list v)
+{
+    Print_Internal(stdout, v);
+    NewLine();
+}
+
+// --------------------------------------------
+
 int main()
 {
     printf("Hello, World!\n");

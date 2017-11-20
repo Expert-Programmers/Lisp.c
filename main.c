@@ -3,9 +3,9 @@
 #include <string.h>
 #include <ctype.h>
 
-typedef void *list; // lisp(list process)中,一切都是列表
+typedef void *List; // lisp(List process)中,一切都是列表
 
-int TypeTag(list v)
+int TypeTag(List v)
 {
     // 获得元素的类型
     // 从后面的基础类型的结构体可以得知,结构体的第一个元素是int型(用来表示类型)
@@ -23,7 +23,7 @@ typedef struct Tcons {
     struct Tcons *cdr;
 } *Pcons, Tcons; // 序偶
 
-list Cons(list car, list cdr)
+List Cons(List car, List cdr)
 {
     Pcons v = (Pcons) malloc(sizeof(Tcons));
     v->tag = CONS;
@@ -32,12 +32,12 @@ list Cons(list car, list cdr)
     return v;
 } // 序偶的构造函数
 
-int IsCons(list cons)
+int IsCons(List cons)
 {   // 判断是否是一个Cons
     return TypeTag(cons) == CONS;
 }
 
-list Car(list cons)
+List Car(List cons)
 {   // 获得car元素
     if (IsCons(cons)) {
         return ((Pcons) cons)->car;
@@ -46,7 +46,7 @@ list Car(list cons)
     }
 }
 
-list Cdr(list cons)
+List Cdr(List cons)
 {
     // 获得cdr元素
     if (IsCons(cons)) {
@@ -56,7 +56,7 @@ list Cdr(list cons)
     }
 }
 
-list SetCar(list cons, list val)
+List SetCar(List cons, List val)
 {
     // 为序偶cons的car元素赋值
     if (IsCons(cons)) {
@@ -67,7 +67,7 @@ list SetCar(list cons, list val)
     }
 }
 
-list SetCdr(list cons, list val)
+List SetCdr(List cons, List val)
 {
     // 为序偶cons的cdr元素赋值
     if (IsCons(cons)) {
@@ -89,14 +89,14 @@ typedef struct Tatom {
 } *Patom, Tatom; // 原子
 
 // 一个简单的链表
-list AtomList = NULL;
-list nil = NULL;
-list t = NULL; // true
+List AtomList = NULL;
+List nil = NULL;
+List t = NULL; // true
 // nil与t虽然值相同,但是所在的内存地址不同,所以这两个变量是有区别的
 
-list Atom(char *name)
+List Atom(char *name)
 {
-    list i = AtomList;
+    List i = AtomList;
 //    所有的原子存放在一个列表里面, 在构建新的Atom的时候, 先去表中查是否存在相同的, 如果不存在相同的, 才创建atom.
 //    享元模式, 节省空间
     while (i) {
@@ -117,7 +117,7 @@ list Atom(char *name)
     }
 }
 
-char *GetAtomString(list atom)
+char *GetAtomString(List atom)
 {
     if (IsCons(atom)) {
         return ((Patom) atom)->name;
@@ -126,17 +126,17 @@ char *GetAtomString(list atom)
     }
 }
 
-int IsAtom(list v)
+int IsAtom(List v)
 {   // 判断是否为atom
     return TypeTag(v) == ATOM;
 }
 
-int IsNULL(list v)
+int IsNULL(List v)
 {
     return v == nil;
 }
 
-list Bool(list b)
+List Bool(List b)
 {
     if (b) {
         return t;
@@ -145,7 +145,7 @@ list Bool(list b)
     }
 }
 
-int GetBool(list v)
+int GetBool(List v)
 {
     if (IsNULL(v)) {
         return 0;
@@ -163,7 +163,7 @@ typedef struct Tinteger {
     int val;
 } *Pinteger, Tintegr; // 数子
 
-list Integer(int i)
+List Integer(int i)
 {
     Pinteger v = (Pinteger) malloc(sizeof(Tintegr));
     v->tag = INTEGER;
@@ -171,12 +171,12 @@ list Integer(int i)
     return v;
 }
 
-int IsInteger(list v)
+int IsInteger(List v)
 {
     return TypeTag(v) == INTEGER;
 }
 
-int GetIneteger(list v)
+int GetIneteger(List v)
 {
     if (IsInteger(v)) {
         return ((Pinteger) v)->val;
@@ -192,11 +192,11 @@ int GetIneteger(list v)
 typedef struct Tcfunc {
     int tag;
     int args;
-    list name;
+    List name;
     void *cfunc;
 } *Pcfunc, Tcfunc; // 函数
 
-list Cfunc(void *f, int args, list name)
+List Cfunc(void *f, int args, List name)
 {
     Pcfunc v = (Pcfunc) malloc(sizeof(Tcfunc));
     v->tag = CFUNC;
@@ -206,12 +206,12 @@ list Cfunc(void *f, int args, list name)
     return v;
 }
 
-int IsCfunc(list v)
+int IsCfunc(List v)
 {
     return TypeTag(v) == CFUNC;
 }
 
-void *GetCfunc(list v)
+void *GetCfunc(List v)
 {
     if (IsCfunc(v)) {
         return ((Pcfunc) v)->cfunc;
@@ -220,7 +220,7 @@ void *GetCfunc(list v)
     }
 }
 
-list GetCfuncName(list v)
+List GetCfuncName(List v)
 {
     if (IsCfunc(v)) {
         return ((Pcfunc) v)->name;
@@ -229,7 +229,7 @@ list GetCfuncName(list v)
     }
 }
 
-int GetCfuncArgs(list v)
+int GetCfuncArgs(List v)
 {
     if (IsCfunc(v)) {
         return ((Pcfunc) v)->args;
@@ -240,11 +240,11 @@ int GetCfuncArgs(list v)
 
 // --------------------------------------------
 
-void Print_Cons(FILE *f, list v);
+void Print_Cons(FILE *f, List v);
 
-void Print_Internal(FILE *f, list v);
+void Print_Internal(FILE *f, List v);
 
-void Print_Internal(FILE *f, list v)
+void Print_Internal(FILE *f, List v)
 {
     if (IsNULL(v)) {
         fprintf(f, "NIL ");
@@ -271,7 +271,7 @@ void Print_Internal(FILE *f, list v)
     }
 }
 
-void Print_Cons(FILE *f, list v)
+void Print_Cons(FILE *f, List v)
 {
     Print_Internal(f, Car(v));
     if (IsCons(Cdr(v))) {
@@ -283,19 +283,19 @@ void Print_Cons(FILE *f, list v)
     }
 }
 
-list NewLine()
+List NewLine()
 {
     fprintf(stdout, "\n");
     return nil;
 }
 
-list Print(list v)
+List Print(List v)
 {
     Print_Internal(stdout, v);
     return v;
 }
 
-list Println(list v)
+List Println(List v)
 {
     Print_Internal(stdout, v);
     NewLine();
@@ -311,7 +311,7 @@ char IgnoreSpace(char c)
     return c;
 }
 
-list ReadInteger(char c)
+List ReadInteger(char c)
 {
     char arr[128];
     char *p = arr;
@@ -325,7 +325,7 @@ list ReadInteger(char c)
     return Integer(atoi(arr));
 }
 
-list ReadAtom(char c)
+List ReadAtom(char c)
 {
     char arr[128];
     char *p = arr;
@@ -339,9 +339,9 @@ list ReadAtom(char c)
     return Atom(arr);
 }
 
-list ReadCons(char c);
+List ReadCons(char c);
 
-list ReadExp(char c)
+List ReadExp(char c)
 {
     c = IgnoreSpace(c);
     if (isdigit(c)) {
@@ -356,9 +356,9 @@ list ReadExp(char c)
     }
 }
 
-list ReadCons(char c)
+List ReadCons(char c)
 {
-    list car, cdr;
+    List car, cdr;
 
     car = ReadExp(c);
     c = IgnoreSpace((char) getchar());
@@ -377,12 +377,101 @@ list ReadCons(char c)
     }
 }
 
-list Read()
+List Read()
 {
     return ReadExp(' ');
 }
 
 // --------------------------------------------
+// 环境
+
+List GlobalEnvironment = NULL;
+
+List ExtendEnvironment(List var, List val, List env)
+{
+    return Cons(Cons(var, val), env);
+}
+
+List ExtendListEnvironment(List vars, List vals, List env)
+{
+    while (!IsNULL(vars)) {
+        env = ExtendEnvironment(Car(vars), Car(vals), env);
+        vars = Cdr(vars);
+        vals = Cdr(vals);
+    }
+    return env;
+}
+
+/* return a cons(var, val) */
+List LookupVar(List var, List env)
+{
+    if (IsNULL(env)) {
+        return nil;
+    } else {
+        if (Car(Car(env)) == var) {
+            return Car(env);
+        } else {
+            LookupVar(var, Cdr(env));
+        }
+    }
+}
+
+List VarVal(List var)
+{
+    List v = LookupVar(var, GlobalEnvironment);
+    if (IsCons(v)) {
+        return Car(v);
+    } else {
+        return v;
+    }
+}
+
+List SetQ(List var, List val)
+{
+    if (IsAtom(var)) {
+        List v = LookupVar(var, GlobalEnvironment);
+        if (IsNULL(v)) {
+            fprintf(stdout, "Extending: ");
+            Print(var);
+            fprintf(stdout, " == ");
+            Print(val);
+            fprintf(stdout, "ENV-before: ");
+            Print(GlobalEnvironment);
+            GlobalEnvironment = ExtendEnvironment(var, val, GlobalEnvironment);
+            printf("ENV-after: ");
+            Print(GlobalEnvironment);
+        } else {
+            printf("Setting! ");
+            Print(var);
+            fprintf(stdout, " == ");
+            Print(val);
+            fprintf(stdout, "ENV-before: ");
+            Print(GlobalEnvironment);
+            SetCdr(v, val);
+            fprintf(stdout, "ENV-after: ");
+            Print(GlobalEnvironment);
+        }
+        fprintf(stdout, "\n");
+        return val;
+    } else {
+        return Atom("SETQ-FAILED");
+    }
+}
+
+List Eval(List val);
+
+List _SetQ(List var, List val)
+{
+    return SetQ(var, Eval(val));
+}
+
+void Defun(void *f, int args, char *name)
+{
+    List str = Atom(name);
+    List v = Cfunc(f, args, str);
+    SetQ(str, v);
+}
+
 
 int main()
 {

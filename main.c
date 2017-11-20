@@ -184,6 +184,60 @@ int GetIneteger(list v)
     }
 }
 
+// --------------------------------------------
+
+#define CFUNC 4
+
+typedef struct Tcfunc {
+    int tag;
+    int args;
+    list name;
+    void *cfunc;
+} *Pcfunc, Tcfunc; // 函数
+
+list Cfunc(void *f, int args, list name)
+{
+    Pcfunc v = (Pcfunc) malloc(sizeof(Tcfunc));
+    v->tag = CFUNC;
+    v->args = args;
+    v->name = name;
+    v->cfunc = f;
+    return v;
+}
+
+int IsCfunc(list v)
+{
+    return TypeTag(v) == CFUNC;
+}
+
+void *GetCfunc(list v)
+{
+    if (IsCfunc(v)) {
+        return ((Pcfunc) v)->cfunc;
+    } else {
+        return NULL;
+    }
+}
+
+list GetCfuncName(list v)
+{
+    if (IsCfunc(v)) {
+        return ((Pcfunc) v)->name;
+    } else {
+        return NULL;
+    }
+}
+
+int GetCfuncArgs(list v)
+{
+    if (IsCfunc(v)) {
+        return ((Pcfunc) v)->args;
+    } else {
+        return NULL;
+    }
+}
+
+// --------------------------------------------
 
 int main()
 {

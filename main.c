@@ -155,6 +155,36 @@ int GetBool(list v)
 
 // --------------------------------------------
 
+#define INTEGER 3
+
+typedef struct Tinteger {
+    int tag;
+    int val;
+} *Pinteger, Tintegr; // 数子
+
+list Integer(int i)
+{
+    Pinteger v = (Pinteger) malloc(sizeof(Tintegr));
+    v->tag = INTEGER;
+    v->val = i;
+    return v;
+}
+
+int IsInteger(list v)
+{
+    return TypeTag(v) == INTEGER;
+}
+
+int GetIneteger(list v)
+{
+    if (IsInteger(v)) {
+        return ((Pinteger) v)->val;
+    } else {
+        return NULL;
+    }
+}
+
+
 int main()
 {
     printf("Hello, World!\n");

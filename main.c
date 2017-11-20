@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 typedef void *list; // lisp(list process)中,一切都是列表
 
@@ -298,6 +299,87 @@ list Println(list v)
 {
     Print_Internal(stdout, v);
     NewLine();
+}
+
+// --------------------------------------------
+
+char IgnoreSpace(char c)
+{
+    while (isspace(c)) {
+        c = (char) getchar();
+    }
+    return c;
+}
+
+list ReadInteger(char c)
+{
+    char arr[128];
+    char *p = arr;
+    while (isdigit(c)) {
+        *p = c;
+        p++;
+        c = (char) getchar();
+    }
+    *p = 0;
+    ungetc(c, stdin);
+    return Integer(atoi(arr));
+}
+
+list ReadAtom(char c)
+{
+    char arr[128];
+    char *p = arr;
+    while (isalnum(c)) {
+        *p = (char) toupper(c);
+        p++;
+        c = (char) getchar();
+    }
+    *p = 0;
+    ungetc(c, stdin);
+    return Atom(arr);
+}
+
+list ReadCons(char c);
+
+list ReadExp(char c)
+{
+    c = IgnoreSpace(c);
+    if (isdigit(c)) {
+        return ReadInteger(c);
+    } else if (isalpha(c)) {
+        return ReadAtom(c);
+    } else if (c == '(') {
+        return ReadCons((char) getchar());
+    } else {
+        printf("ReadExp: unrecognized character = '%c'\n", c);
+        return Atom("READEXP: ERROR");
+    }
+}
+
+list ReadCons(char c)
+{
+    list car, cdr;
+
+    car = ReadExp(c);
+    c = IgnoreSpace((char) getchar());
+    if (c == '.') {
+        cdr = ReadExp((char) getchar());
+        c = IgnoreSpace((char) getchar());
+        if (c != ')') {
+            return Atom("READCONS:ERROR");
+        } else {
+            return Cons(car, cdr);
+        }
+    } else if (c == ')') {
+        return Cons(car, nil);
+    } else {
+        return Cons(car, ReadCons(c));
+    }
+}
+
+list Read()
+{
+    return ReadExp(' ');
 }
 
 // --------------------------------------------

@@ -472,6 +472,18 @@ void Defun(void *f, int args, char *name)
     SetQ(str, v);
 }
 
+// --------------------------------------------
+// condition
+
+List _If(List exp, List consequent, List alternative)
+{
+    if (!IsNULL(Eval(exp))) {
+        return Eval(consequent);
+    } else {
+        return Eval(alternative);
+    }
+}
+
 
 int main()
 {

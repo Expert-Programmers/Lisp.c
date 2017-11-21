@@ -458,7 +458,7 @@ List SetQ(List var, List val)
     }
 }
 
-List Eval(List val);
+List Eval(List exp);
 
 List _SetQ(List var, List val)
 {
@@ -484,8 +484,93 @@ List _If(List exp, List consequent, List alternative)
     }
 }
 
+// --------------------------------------------
+// apply and eval  -- magic
 
-int main()
+List Apply(List func, List args);
+
+List Eval(List exp)
+{
+    if (IsInteger(exp)) {
+        return exp;
+    } else if (IsAtom(exp)) {
+        return VarVal(exp);
+    } else if (IsCons(exp)) {
+        return Apply(Eval(Car(exp)), Cdr(exp));
+    }
+}
+
+List EvalList(List args)
+{
+    if (IsNULL(args)) {
+        return nil;
+    } else {
+        return Cons(Eval(Car(args)), EvalList(Cdr(args)));
+    }
+}
+
+List ApplyCFun(void *func, int n, List args)
+{
+    List (*f)(...) = func;
+    switch (n > 0 ? n : -n) {
+        case 0:
+            return (f)();
+        case 1:
+            return (f)(Car(args));
+        case 2:
+            return (f)(Car(args), Car(Cdr(args)), Car(Cdr(Cdr(args))));
+        case 3:
+            return (f)(Car(args), Car(Cdr(args)), Car(Cdr(Cdr(args))), Car(Cdr(Cdr(Cdr(args)))));
+        case 16:
+            return (f)(args);
+        default:
+            return Atom("NOGOODFUNC");
+    }
+}
+
+
+List ProgN(List seq)
+{
+    List v = nil;
+    while (IsCons(seq)) {
+        v = Eval(Car(seq));
+        seq = Cdr(seq);
+    }
+    return v;
+}
+
+List Apply(List func, List args)
+{
+    if (IsCfunc(func)) {
+        void *f = GetCfunc(func);
+        int n = GetCfuncArgs(func);
+        if (f) {
+            List argl = n > 0 ? EvalList(args) : args;
+            return ApplyCFun(f, n, argl);
+        } else
+            return Atom("APPLY:NOPTR-IN-CFUNC");
+    } else {
+        /* Not a cfunc, look for lambda! */
+        List lam = func; /* VarVal(fun); */
+        if (IsNULL(lam))
+            return Atom("EVAL:NO-SUCH-LAM");
+        if (IsCons(lam)) {
+            List argnam = Car(Cdr(lam));
+            List body = Cdr(Cdr(lam));
+            List argl = EvalList(args);
+            List savedEnv = GlobalEnvironment;
+            List ret = nil;
+            GlobalEnvironment = ExtendListEnvironment(argnam, argl, GlobalEnvironment);
+            ret = ProgN(body);
+            GlobalEnvironment = savedEnv;
+            return ret;
+        }
+        return Cons(Atom("EVAL:ERROR"), Cons(func, args));
+    }
+}
+
+
+int main(int args, char *argv[])
 {
     printf("Hello, World!\n");
     return 0;

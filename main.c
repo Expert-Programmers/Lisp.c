@@ -88,11 +88,12 @@ typedef struct Tatom {
     struct Tatom *next;
 } *Patom, Tatom; // 原子
 
+List Atom(char *name);
+
 // 一个简单的链表
 List AtomList = NULL;
 List nil = NULL;
 List t = NULL; // true
-// nil与t虽然值相同,但是所在的内存地址不同,所以这两个变量是有区别的
 
 List Atom(char *name)
 {
@@ -176,7 +177,7 @@ int IsInteger(List v)
     return TypeTag(v) == INTEGER;
 }
 
-int GetIneteger(List v)
+int GetInteger(List v)
 {
     if (IsInteger(v)) {
         return ((Pinteger) v)->val;
@@ -259,7 +260,7 @@ void Print_Internal(FILE *f, List v)
                 fprintf(f, "%s ", GetAtomString(v));
                 break;
             case INTEGER:
-                fprintf(f, "%d ", GetIneteger(v));
+                fprintf(f, "%d ", GetInteger(v));
                 break;
             case CFUNC:
                 fprintf(f, "<CFUNC %d %s>", GetCfuncArgs(v), GetAtomString(GetCfuncName(v)));
@@ -470,6 +471,12 @@ void Defun(void *f, int args, char *name)
     List str = Atom(name);
     List v = Cfunc(f, args, str);
     SetQ(str, v);
+
+    // Integer
+//    Defun(Plus, 2, "PLUS");
+//    Defun(Negate, 1, "NEGATE");
+//    Defun(Times, 2, "TIMES");
+
 }
 
 // --------------------------------------------
@@ -569,9 +576,121 @@ List Apply(List func, List args)
     }
 }
 
+List Quote(List a)
+{
+    return a;
+}
+
+List Plus(List a, List b)
+{
+    return Integer(GetInteger(a) + GetInteger(b));
+}
+
+List Negate(List a)
+{
+    return Integer(-GetInteger(a));
+}
+
+List Times(List a, List b)
+{
+    return Integer(GetInteger(a) * GetInteger(b));
+}
+
+List Eq(List a, List b)
+{
+    return Bool((List) (a == b));
+}
+
+List Equal(List a, List b)
+{
+    if (a == b)
+        return t;
+    else if (TypeTag(a) != TypeTag(b))
+        return nil;
+    else if (IsCons(a))
+        return Bool((List) (!IsNULL(Equal(Car(a), Car(b))) && !IsNULL(Equal(Cdr(a), Cdr(b)))));
+    else if (IsInteger(a))
+        return Bool((List) (GetInteger(a) == GetInteger(b)));
+    else
+        return nil;
+}
+
+List Lambda(List all)
+{
+    return Cons(Atom("LAMBDA"), all);
+}
+
+
+void Init()
+{
+    nil = Atom("NIL");
+    t = Atom("T");
+    GlobalEnvironment = nil;
+    SetQ(t, t);
+
+    // Integers
+    Defun(Plus, 2, "PLUS");
+    Defun(Negate, 1, "NEGATE");
+    Defun(Times, 2, "TIMES");
+
+    // Cons & Atoms
+    Defun(Cons, 2, "CONS");
+    Defun(Car, 1, "CAR");
+    Defun(Cdr, 1, "CDR");
+    Defun(SetCar, 2, "SETCAR");
+    Defun(SetCdr, 2, "SETCDR");
+
+    /* Bindings */
+    Defun(SetQ, 2, "SET");
+    Defun(_SetQ, -2, "SETQ");
+
+    /* Yang & Yeng */
+    Defun(Eval, 1, "EVAL");
+    Defun(Apply, 2, "APPLY");
+
+    /* Pred */
+    Defun(Eq, 2, "EQ");
+    Defun(Equal, 2, "EQUAL");
+
+    /* IO */
+    Defun(Print, 1, "PRINT");
+    Defun(Print, 1, "PRINTLN");
+    Defun(NewLine(), 1, "NEWLINE");
+    Defun(Read, 0, "READ");
+
+    /* NEVAL */
+    Defun(Quote, -1, "QUOTE");
+    Defun(_If, -3, "IF");
+    Defun(Lambda, -16, "LAMBDA");
+}
+
+void ReadEvalPrintLoop()
+{
+    List exp = nil;
+    while (exp != Atom("EOF")) {
+        printf(">>");
+        exp = Read();
+        Print(Eval(exp));
+    }
+}
+
+void Lisp()
+{
+    Init();
+    {
+        List v;
+        v = nil;
+        Print(v);
+        Print(v);
+        Print(nil);
+        Print(t);
+        Print(t);
+    }
+    ReadEvalPrintLoop();
+}
 
 int main(int args, char *argv[])
 {
-    printf("Hello, World!\n");
+    Lisp();
     return 0;
 }

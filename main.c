@@ -39,43 +39,27 @@ int IsCons(List cons)
 
 List Car(List cons)
 {   // 获得car元素
-    if (IsCons(cons)) {
-        return ((Pcons) cons)->car;
-    } else {
-        return NULL;
-    }
+    return ((Pcons) cons)->car;
 }
 
 List Cdr(List cons)
 {
     // 获得cdr元素
-    if (IsCons(cons)) {
-        return ((Pcons) cons)->cdr;
-    } else {
-        return NULL;
-    }
+    return ((Pcons) cons)->cdr;
 }
 
 List SetCar(List cons, List val)
 {
     // 为序偶cons的car元素赋值
-    if (IsCons(cons)) {
-        ((Pcons) cons)->car = val;
-        return cons;
-    } else {
-        return NULL;
-    }
+    ((Pcons) cons)->car = val;
+    return cons;
 }
 
 List SetCdr(List cons, List val)
 {
     // 为序偶cons的cdr元素赋值
-    if (IsCons(cons)) {
-        ((Pcons) cons)->cdr = val;
-        return cons;
-    } else {
-        return NULL;
-    }
+    ((Pcons) cons)->cdr = val;
+    return cons;
 }
 
 // --------------------------------------------
@@ -120,11 +104,7 @@ List Atom(char *name)
 
 char *GetAtomString(List atom)
 {
-    if (IsCons(atom)) {
-        return ((Patom) atom)->name;
-    } else {
-        return NULL;
-    }
+    return ((Patom) atom)->name;
 }
 
 int IsAtom(List v)
@@ -179,11 +159,7 @@ int IsInteger(List v)
 
 int GetInteger(List v)
 {
-    if (IsInteger(v)) {
-        return ((Pinteger) v)->val;
-    } else {
-        return NULL;
-    }
+    return ((Pinteger) v)->val;
 }
 
 // --------------------------------------------
@@ -214,29 +190,17 @@ int IsCfunc(List v)
 
 void *GetCfunc(List v)
 {
-    if (IsCfunc(v)) {
-        return ((Pcfunc) v)->cfunc;
-    } else {
-        return NULL;
-    }
+    return ((Pcfunc) v)->cfunc;
 }
 
 List GetCfuncName(List v)
 {
-    if (IsCfunc(v)) {
-        return ((Pcfunc) v)->name;
-    } else {
-        return NULL;
-    }
+    return ((Pcfunc) v)->name;
 }
 
 int GetCfuncArgs(List v)
 {
-    if (IsCfunc(v)) {
-        return ((Pcfunc) v)->args;
-    } else {
-        return NULL;
-    }
+    return ((Pcfunc) v)->args;
 }
 
 // --------------------------------------------
@@ -471,12 +435,6 @@ void Defun(void *f, int args, char *name)
     List str = Atom(name);
     List v = Cfunc(f, args, str);
     SetQ(str, v);
-
-    // Integer
-//    Defun(Plus, 2, "PLUS");
-//    Defun(Negate, 1, "NEGATE");
-//    Defun(Times, 2, "TIMES");
-
 }
 
 // --------------------------------------------
@@ -518,7 +476,7 @@ List EvalList(List args)
 
 List ApplyCFun(void *func, int n, List args)
 {
-    List (*f)(...) = func;
+    List (*f)() = func;
     switch (n > 0 ? n : -n) {
         case 0:
             return (f)();
@@ -598,7 +556,7 @@ List Times(List a, List b)
 
 List Eq(List a, List b)
 {
-    return Bool((List) (a == b));
+    return Bool((a == b));
 }
 
 List Equal(List a, List b)
@@ -608,9 +566,9 @@ List Equal(List a, List b)
     else if (TypeTag(a) != TypeTag(b))
         return nil;
     else if (IsCons(a))
-        return Bool((List) (!IsNULL(Equal(Car(a), Car(b))) && !IsNULL(Equal(Cdr(a), Cdr(b)))));
+        return Bool((!IsNULL(Equal(Car(a), Car(b))) && !IsNULL(Equal(Cdr(a), Cdr(b)))));
     else if (IsInteger(a))
-        return Bool((List) (GetInteger(a) == GetInteger(b)));
+        return Bool((GetInteger(a) == GetInteger(b)));
     else
         return nil;
 }
